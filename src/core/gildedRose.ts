@@ -20,21 +20,20 @@ export class GildedRose {
 	updateQuality() {
 		for (let i = 0; i < this.items.length; i++) {
 			const item = this.items[i];
-			if (item.name == 'Sulfuras, Hand of Ragnaros') {
-				continue;
-			}
-			this.updateQualityItem(item);
+			this.updateQualityFor(item);
 		}
 		return this.items;
 	}
 
-	private updateQualityItem(item: Item) {
+	private updateQualityFor(item: Item) {
 		switch (item.name) {
 			case 'Aged Brie':
 				this.updateAgedBrieQualityItem(item);
 				break;
 			case 'Backstage passes to a TAFKAL80ETC concert':
 				this.updateBackstagePassesQuality(item);
+				break;
+			case 'Sulfuras, Hand of Ragnaros':
 				break;
 			default:
 				this.updateStandardItemQuality(item);
