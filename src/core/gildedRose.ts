@@ -29,23 +29,27 @@ export class GildedRose {
 	}
 
 	private updateQualityItem(item: Item) {
-		const isAgedBrie = item.name == 'Aged Brie';
-		const isBackstagePasses = item.name == 'Backstage passes to a TAFKAL80ETC concert';
-		if (isAgedBrie) {
-			this.updateAgedBrieQualityItem(item);
-		} else {
-			if (isBackstagePasses) {
+		switch (item.name) {
+			case 'Aged Brie':
+				this.updateAgedBrieQualityItem(item);
+				break;
+			case 'Backstage passes to a TAFKAL80ETC concert':
 				this.updateBackstagePassesQuality(item);
-			} else {
-				if (item.quality > 0) {
-					item.quality = item.quality - 1;
-				}
-				item.sellIn = item.sellIn - 1;
-				if (item.sellIn < 0) {
-					if (item.quality > 0) {
-						item.quality = item.quality - 1;
-					}
-				}
+				break;
+			default:
+				this.updateStandardItemQuality(item);
+				break;
+		}
+	}
+
+	private updateStandardItemQuality(item: Item) {
+		if (item.quality > 0) {
+			item.quality = item.quality - 1;
+		}
+		item.sellIn = item.sellIn - 1;
+		if (item.sellIn < 0) {
+			if (item.quality > 0) {
+				item.quality = item.quality - 1;
 			}
 		}
 	}
