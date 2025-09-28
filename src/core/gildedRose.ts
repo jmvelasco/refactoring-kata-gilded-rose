@@ -36,13 +36,13 @@ export class GildedRose {
 			if (item.name == 'Backstage passes to a TAFKAL80ETC concert') {
 				this.updateBackstagePassesQuality(i, item);
 			} else {
-				if (this.canDecreaseItemQuality(i)) {
-					this.decreaseItemQuality(i);
+				if (this.items[i].quality > 0) {
+					this.items[i].quality = this.items[i].quality - 1;
 				}
-				this.decreaseItemSellIndays(i);
+				this.items[i].sellIn = this.items[i].sellIn - 1;
 				if (item.sellIn < 0) {
-					if (this.canDecreaseItemQuality(i)) {
-						this.decreaseItemQuality(i);
+					if (this.items[i].quality > 0) {
+						this.items[i].quality = this.items[i].quality - 1;
 					}
 				}
 			}
@@ -50,61 +50,41 @@ export class GildedRose {
 	}
 
 	private updateBackstagePassesQuality(i: number, item: Item) {
-		if (this.canIncreaseQuality(i)) {
-			this.increaseItemQuality(i);
+		if (this.items[i].quality < 50) {
+			this.items[i].quality = this.items[i].quality + 1;
 			this.itemInTheBackstage(i);
 		}
-		this.decreaseItemSellIndays(i);
+		this.items[i].sellIn = this.items[i].sellIn - 1;
 		if (item.sellIn < 0) {
 			item.quality = item.quality - item.quality;
 		}
 	}
 
 	private updateAgedBrieQualityItem(i: number, item: Item) {
-		if (this.canIncreaseQuality(i)) {
-			this.increaseItemQuality(i);
+		if (this.items[i].quality < 50) {
+			this.items[i].quality = this.items[i].quality + 1;
 			this.itemInTheBackstage(i);
 		}
-		this.decreaseItemSellIndays(i);
+		this.items[i].sellIn = this.items[i].sellIn - 1;
 		if (item.sellIn < 0) {
-			if (this.canIncreaseQuality(i)) {
-				this.increaseItemQuality(i);
+			if (this.items[i].quality < 50) {
+				this.items[i].quality = this.items[i].quality + 1;
 			}
 		}
-	}
-
-	private canDecreaseItemQuality(i: number) {
-		return this.items[i].quality > 0;
 	}
 
 	private itemInTheBackstage(i: number) {
 		if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
 			if (this.items[i].sellIn < 11) {
-				if (this.canIncreaseQuality(i)) {
-					this.increaseItemQuality(i);
+				if (this.items[i].quality < 50) {
+					this.items[i].quality = this.items[i].quality + 1;
 				}
 			}
 			if (this.items[i].sellIn < 6) {
-				if (this.canIncreaseQuality(i)) {
-					this.increaseItemQuality(i);
+				if (this.items[i].quality < 50) {
+					this.items[i].quality = this.items[i].quality + 1;
 				}
 			}
 		}
-	}
-
-	private decreaseItemSellIndays(i: number) {
-		this.items[i].sellIn = this.items[i].sellIn - 1;
-	}
-
-	private canIncreaseQuality(i: number) {
-		return this.items[i].quality < 50;
-	}
-
-	private decreaseItemQuality(i: number) {
-		this.items[i].quality = this.items[i].quality - 1;
-	}
-
-	private increaseItemQuality(i: number) {
-		this.items[i].quality = this.items[i].quality + 1;
 	}
 }
