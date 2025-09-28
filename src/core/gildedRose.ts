@@ -33,26 +33,30 @@ export class GildedRose {
 		if (isAgedBrie) {
 			this.updateAgedBrieQualityItem(i, item);
 		} else {
-			if (item.name != 'Backstage passes to a TAFKAL80ETC concert') {
+			if (item.name == 'Backstage passes to a TAFKAL80ETC concert') {
+				this.updateBackstagePassesQuality(i, item);
+			} else {
 				if (this.canDecreaseItemQuality(i)) {
 					this.decreaseItemQuality(i);
 				}
-			} else {
-				if (this.canIncreaseQuality(i)) {
-					this.increaseItemQuality(i);
-					this.itemInTheBackstage(i);
-				}
-			}
-			this.decreaseItemSellIndays(i);
-			if (item.sellIn < 0) {
-				if (item.name != 'Backstage passes to a TAFKAL80ETC concert') {
+				this.decreaseItemSellIndays(i);
+				if (item.sellIn < 0) {
 					if (this.canDecreaseItemQuality(i)) {
 						this.decreaseItemQuality(i);
 					}
-				} else {
-					item.quality = item.quality - item.quality;
 				}
 			}
+		}
+	}
+
+	private updateBackstagePassesQuality(i: number, item: Item) {
+		if (this.canIncreaseQuality(i)) {
+			this.increaseItemQuality(i);
+			this.itemInTheBackstage(i);
+		}
+		this.decreaseItemSellIndays(i);
+		if (item.sellIn < 0) {
+			item.quality = item.quality - item.quality;
 		}
 	}
 
