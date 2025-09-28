@@ -24,34 +24,38 @@ export class GildedRose {
 			if (item.name == 'Sulfuras, Hand of Ragnaros') {
 				continue;
 			}
-			if (item.name != 'Aged Brie' && item.name != 'Backstage passes to a TAFKAL80ETC concert') {
-				if (this.canDecreaseItemQuality(i)) {
-					this.decreaseItemQuality(i);
+			this.updateQualityItem(item, i);
+		}
+		return this.items;
+	}
+
+	private updateQualityItem(item: Item, i: number) {
+		if (item.name != 'Aged Brie' && item.name != 'Backstage passes to a TAFKAL80ETC concert') {
+			if (this.canDecreaseItemQuality(i)) {
+				this.decreaseItemQuality(i);
+			}
+		} else {
+			if (this.canIncreaseQuality(i)) {
+				this.increaseItemQuality(i);
+				this.itemInTheBackstage(i);
+			}
+		}
+		this.decreaseItemSellIndays(i);
+		if (item.sellIn < 0) {
+			if (item.name != 'Aged Brie') {
+				if (item.name != 'Backstage passes to a TAFKAL80ETC concert') {
+					if (this.canDecreaseItemQuality(i)) {
+						this.decreaseItemQuality(i);
+					}
+				} else {
+					item.quality = item.quality - item.quality;
 				}
 			} else {
 				if (this.canIncreaseQuality(i)) {
 					this.increaseItemQuality(i);
-					this.itemInTheBackstage(i);
-				}
-			}
-			this.decreaseItemSellIndays(i);
-			if (item.sellIn < 0) {
-				if (item.name != 'Aged Brie') {
-					if (item.name != 'Backstage passes to a TAFKAL80ETC concert') {
-						if (this.canDecreaseItemQuality(i)) {
-							this.decreaseItemQuality(i);
-						}
-					} else {
-						item.quality = item.quality - item.quality;
-					}
-				} else {
-					if (this.canIncreaseQuality(i)) {
-						this.increaseItemQuality(i);
-					}
 				}
 			}
 		}
-		return this.items;
 	}
 
 	private canDecreaseItemQuality(i: number) {
