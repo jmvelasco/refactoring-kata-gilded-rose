@@ -1,4 +1,4 @@
-import { Item, GildedRose } from '../core/gildedRose';
+import { GildedRose, InnItem, Item } from '../core/gildedRose';
 
 describe('The Gilded Rose', () => {
 	it('updates quality for a new item', () => {
@@ -12,15 +12,15 @@ describe('The Gilded Rose', () => {
 
 		const items = gildedRose.updateQuality();
 
-		expect(items).toMatchSnapshot();
+		expect(items.map((item) => item.toString())).toMatchSnapshot();
 	});
 });
 
-function generationCombinationOfItems(names: string[], sellInDays: number[], qualities: number[]) {
+function generationCombinationOfItems(names: string[], sellInDays: number[], qualities: number[]): InnItem[] {
 	return names.flatMap((name) => {
 		return sellInDays.flatMap((sellInDay) => {
 			return qualities.flatMap((qualities) => {
-				return new Item(name, sellInDay, qualities);
+				return InnItem.createFrom(new Item(name, sellInDay, qualities));
 			});
 		});
 	});

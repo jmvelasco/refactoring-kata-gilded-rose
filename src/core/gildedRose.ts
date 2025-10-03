@@ -10,78 +10,94 @@ export class Item {
 	}
 }
 
-export class GildedRose {
-	items: Array<Item>;
+export class InnItem {
+	protected constructor(
+		private name: string,
+		private sellIn: number,
+		private quality: number
+	) {}
 
-	constructor(items = []) {
-		this.items = items;
+	static createFrom(item: Item) {
+		return new InnItem(item.name, item.sellIn, item.quality);
 	}
 
 	updateQuality() {
-		for (let i = 0; i < this.items.length; i++) {
-			const item = this.items[i];
-			this.updateQualityFor(item);
-		}
-		return this.items;
-	}
-
-	private updateQualityFor(item: Item) {
-		switch (item.name) {
+		switch (this.name) {
 			case 'Aged Brie':
-				this.updateAgedBrieQualityItem(item);
+				this.updateAgedBrieItemQuality();
 				break;
 			case 'Backstage passes to a TAFKAL80ETC concert':
-				this.updateBackstagePassesQuality(item);
+				this.updateBackstagePassItemQuality();
 				break;
 			case 'Sulfuras, Hand of Ragnaros':
 				break;
 			default:
-				this.updateStandardItemQuality(item);
+				this.updateStandardItemQuality();
 				break;
 		}
 	}
 
-	private updateStandardItemQuality(item: Item) {
-		if (item.quality > 0) {
-			item.quality = item.quality - 1;
+	private updateAgedBrieItemQuality() {
+		if (this.quality < 50) {
+			this.quality = this.quality + 1;
 		}
-		item.sellIn = item.sellIn - 1;
-		if (item.sellIn < 0) {
-			if (item.quality > 0) {
-				item.quality = item.quality - 1;
+		this.sellIn = this.sellIn - 1;
+		if (this.sellIn < 0) {
+			if (this.quality < 50) {
+				this.quality = this.quality + 1;
 			}
 		}
 	}
 
-	private updateBackstagePassesQuality(item: Item) {
-		if (item.quality < 50) {
-			item.quality = item.quality + 1;
-			if (item.sellIn < 11) {
-				if (item.quality < 50) {
-					item.quality = item.quality + 1;
+	private updateBackstagePassItemQuality() {
+		if (this.quality < 50) {
+			this.quality = this.quality + 1;
+			if (this.sellIn < 11) {
+				if (this.quality < 50) {
+					this.quality = this.quality + 1;
 				}
 			}
-			if (item.sellIn < 6) {
-				if (item.quality < 50) {
-					item.quality = item.quality + 1;
+			if (this.sellIn < 6) {
+				if (this.quality < 50) {
+					this.quality = this.quality + 1;
 				}
 			}
 		}
-		item.sellIn = item.sellIn - 1;
-		if (item.sellIn < 0) {
-			item.quality = item.quality - item.quality;
+		this.sellIn = this.sellIn - 1;
+		if (this.sellIn < 0) {
+			this.quality = this.quality - this.quality;
 		}
 	}
 
-	private updateAgedBrieQualityItem(item: Item) {
-		if (item.quality < 50) {
-			item.quality = item.quality + 1;
+	private updateStandardItemQuality() {
+		if (this.quality > 0) {
+			this.quality = this.quality - 1;
 		}
-		item.sellIn = item.sellIn - 1;
-		if (item.sellIn < 0) {
-			if (item.quality < 50) {
-				item.quality = item.quality + 1;
+		this.sellIn = this.sellIn - 1;
+		if (this.sellIn < 0) {
+			if (this.quality > 0) {
+				this.quality = this.quality - 1;
 			}
 		}
+	}
+
+	toString() {
+		return `InnItem {
+    "name": "${this.name}",
+    "quality": ${this.quality},
+    "sellIn": ${this.sellIn},
+  }`;
+	}
+}
+
+export class GildedRose {
+	constructor(public items: InnItem[]) {}
+
+	updateQuality() {
+		this.items.forEach((item) => {
+			item.updateQuality();
+		});
+
+		return this.items;
 	}
 }
