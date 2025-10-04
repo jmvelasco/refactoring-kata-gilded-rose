@@ -12,13 +12,27 @@ export class Item {
 
 export class InnItem {
 	protected constructor(
-		private name: string,
-		private sellIn: number,
-		private quality: number
+		protected name: string,
+		protected sellIn: number,
+		protected quality: number
 	) {}
 
 	static createFrom(item: Item) {
-		return new InnItem(item.name, item.sellIn, item.quality);
+		return InnItem.createFromNew(item);
+	}
+
+	static createFromNew(item: Item) {
+		switch (this.name) {
+			case 'Aged Brie':
+				return new AgedBrie('Aged Brie', item.sellIn, item.quality);
+			case 'Backstage passes to a TAFKAL80ETC concert':
+				return new BackstagePasses('Backstage passes to a TAFKAL80ETC concert', item.sellIn, item.quality);
+			case 'Sulfuras, Hand of Ragnaros':
+				return new Sulfuras('Sulfuras, Hand of Ragnaros', item.sellIn, item.quality);
+				break;
+			default:
+				return new InnItem(item.name, item.sellIn, item.quality);
+		}
 	}
 
 	updateQuality() {
@@ -88,6 +102,45 @@ export class InnItem {
     "sellIn": ${this.sellIn},
   }`;
 	}
+}
+
+class AgedBrie extends InnItem {
+	updateQuality() {
+		if (this.quality < 50) {
+			this.quality = this.quality + 1;
+		}
+		this.sellIn = this.sellIn - 1;
+		if (this.sellIn < 0) {
+			if (this.quality < 50) {
+				this.quality = this.quality + 1;
+			}
+		}
+	}
+}
+class BackstagePasses extends InnItem {
+	updateQuality() {
+		if (this.quality < 50) {
+			this.quality = this.quality + 1;
+			if (this.sellIn < 11) {
+				if (this.quality < 50) {
+					this.quality = this.quality + 1;
+				}
+			}
+			if (this.sellIn < 6) {
+				if (this.quality < 50) {
+					this.quality = this.quality + 1;
+				}
+			}
+		}
+		this.sellIn = this.sellIn - 1;
+		if (this.sellIn < 0) {
+			this.quality = this.quality - this.quality;
+		}
+	}
+}
+
+class Sulfuras extends InnItem {
+	updateQuality() {}
 }
 
 export class GildedRose {
