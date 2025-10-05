@@ -22,7 +22,7 @@ export class InnItem {
 	}
 
 	static createFromNew(item: Item) {
-		switch (this.name) {
+		switch (item.name) {
 			case 'Aged Brie':
 				return new AgedBrie('Aged Brie', item.sellIn, item.quality);
 			case 'Backstage passes to a TAFKAL80ETC concert':
