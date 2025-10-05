@@ -6,6 +6,6 @@ describe('The Gilded Rose', () => {
 
 		const items = gildedRose.updateQuality();
 
-		expect(items[0]).toEqual({"name": "new item", "quality": 0, "sellIn": -1});
+		expect(items[0]).toEqual({ name: 'new item', quality: 0, sellIn: -1 });
 	});
 });
